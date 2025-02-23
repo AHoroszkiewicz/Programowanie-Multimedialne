@@ -1,1 +1,2 @@
-# Programowanie Multimedialne
+Studia
+Zajęcia z programowania multimedialnego

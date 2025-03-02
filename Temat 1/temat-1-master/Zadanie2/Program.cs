@@ -19,6 +19,10 @@ namespace PMLabs
 
     class Program
     {
+        public static Torus torus = new Torus();
+        public static Teapot teapot = new Teapot();
+        public static Sphere sphere = new Sphere();
+
         public static void InitOpenGLProgram(Window window)
         {
             // Czyszczenie okna na kolor czarny
@@ -43,9 +47,11 @@ namespace PMLabs
             GL.UniformMatrix4(DemoShaders.spConstant.U("V"), 1, false, V.Values1D);
 
             mat4 M = mat4.Identity;
+            M *= mat4.Rotate(glm.Radians(60f), new vec3(1, 1, 2));
             GL.UniformMatrix4(DemoShaders.spConstant.U("M"), 1, false, M.Values1D);
 
             // TU RYSUJEMY
+            teapot.drawWire();
 
             Glfw.SwapBuffers(window);
         }

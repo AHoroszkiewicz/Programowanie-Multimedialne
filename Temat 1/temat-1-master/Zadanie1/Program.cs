@@ -55,10 +55,26 @@ namespace PMLabs
             GL.UniformMatrix4(DemoShaders.spConstant.U("M"), 1, false, M.Values1D);
             torus.drawWire();
 
+            for (int i = 0; i < 12; i++)
+            {
+                mat4 M1 = M;
+                M1 *= mat4.RotateZ(glm.Radians(30f*i)) * mat4.Translate(1f,0,0) * mat4.Scale(0.1f,0.1f,0.1f);
+                GL.UniformMatrix4(DemoShaders.spConstant.U("M"), 1, false, M1.Values1D);
+                cube.drawWire();
+            }
+
             //torus2
             M = mat4.Translate(1f, 0.0f, 0.0f) * mat4.RotateZ(time);
             GL.UniformMatrix4(DemoShaders.spConstant.U("M"), 1, false, M.Values1D);
             torus.drawWire();
+
+            for (int i = 0; i < 12; i++)
+            {
+                mat4 M1 = M;
+                M1 *= mat4.RotateZ(glm.Radians((30f * i)+15)) * mat4.Translate(1f, 0, 0) * mat4.Scale(0.1f, 0.1f, 0.1f);
+                GL.UniformMatrix4(DemoShaders.spConstant.U("M"), 1, false, M1.Values1D);
+                cube.drawWire();
+            }
 
             Glfw.SwapBuffers(window);
         }

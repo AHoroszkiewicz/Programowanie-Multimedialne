@@ -34,9 +34,9 @@ namespace PMLabs
             DemoShaders.InitShaders("Shaders\\");
         }
 
-        public static void DrawScene(Window window, float time)
+        public static void DrawScene(Window window)
         {
-            GL.Clear(ClearBufferMask.ColorBufferBit| ClearBufferMask.DepthBufferBit);
+            GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
 
             mat4 V = mat4.LookAt(
                 new vec3(0.0f, 0.0f, -5.0f),
@@ -49,32 +49,10 @@ namespace PMLabs
             GL.UniformMatrix4(DemoShaders.spConstant.U("V"), 1, false, V.Values1D);
 
             mat4 M = mat4.Identity;
-
-            //torus1
-            M = mat4.Translate(-1f, 0.0f, 0.0f) * mat4.RotateZ(-time);
             GL.UniformMatrix4(DemoShaders.spConstant.U("M"), 1, false, M.Values1D);
+
+            // TU RYSUJEMY
             torus.drawWire();
-
-            for (int i = 0; i < 12; i++)
-            {
-                mat4 M1 = M;
-                M1 *= mat4.RotateZ(glm.Radians(30f*i)) * mat4.Translate(1f,0,0) * mat4.Scale(0.1f,0.1f,0.1f);
-                GL.UniformMatrix4(DemoShaders.spConstant.U("M"), 1, false, M1.Values1D);
-                cube.drawWire();
-            }
-
-            //torus2
-            M = mat4.Translate(1f, 0.0f, 0.0f) * mat4.RotateZ(time);
-            GL.UniformMatrix4(DemoShaders.spConstant.U("M"), 1, false, M.Values1D);
-            torus.drawWire();
-
-            for (int i = 0; i < 12; i++)
-            {
-                mat4 M1 = M;
-                M1 *= mat4.RotateZ(glm.Radians((30f * i)+15)) * mat4.Translate(1f, 0, 0) * mat4.Scale(0.1f, 0.1f, 0.1f);
-                GL.UniformMatrix4(DemoShaders.spConstant.U("M"), 1, false, M1.Values1D);
-                cube.drawWire();
-            }
 
             Glfw.SwapBuffers(window);
         }
@@ -101,7 +79,7 @@ namespace PMLabs
 
             while (!Glfw.WindowShouldClose(window))
             {
-                DrawScene(window, (float)Glfw.Time);
+                DrawScene(window);
                 Glfw.PollEvents();
             }
 

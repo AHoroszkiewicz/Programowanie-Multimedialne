@@ -23,6 +23,7 @@ namespace PMLabs
         public static Torus torus = new Torus();
         public static Teapot teapot = new Teapot();
         public static Sphere sphere = new Sphere();
+        public static Cube cube = new Cube();
 
         public static void InitOpenGLProgram(Window window)
         {
@@ -50,12 +51,12 @@ namespace PMLabs
             mat4 M = mat4.Identity;
 
             //torus1
-            M = mat4.Translate(new vec3(-1f, 0.0f, 0.0f)) * mat4.RotateZ(-time);
+            M = mat4.Translate(-1f, 0.0f, 0.0f) * mat4.RotateZ(-time);
             GL.UniformMatrix4(DemoShaders.spConstant.U("M"), 1, false, M.Values1D);
             torus.drawWire();
 
             //torus2
-            M = mat4.Translate(new vec3(1f, 0.0f, 0.0f)) * mat4.RotateZ(time);
+            M = mat4.Translate(1f, 0.0f, 0.0f) * mat4.RotateZ(time);
             GL.UniformMatrix4(DemoShaders.spConstant.U("M"), 1, false, M.Values1D);
             torus.drawWire();
 

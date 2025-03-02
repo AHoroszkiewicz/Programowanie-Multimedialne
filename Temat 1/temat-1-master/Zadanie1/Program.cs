@@ -5,6 +5,7 @@ using GlmSharp;
 
 using Shaders;
 using Models;
+using System.Numerics;
 
 namespace PMLabs
 {
@@ -47,11 +48,21 @@ namespace PMLabs
             GL.UniformMatrix4(DemoShaders.spConstant.U("V"), 1, false, V.Values1D);
 
             mat4 M = mat4.Identity;
-            M *= mat4.Rotate(glm.Radians(60f*time), new vec3(1, 1, 2));
-            GL.UniformMatrix4(DemoShaders.spConstant.U("M"), 1, false, M.Values1D);
 
-            // TU RYSUJEMY
-            teapot.drawWire();
+            //słońce
+            M = mat4.Scale(0.5f,0.5f,0.5f);
+            GL.UniformMatrix4(DemoShaders.spConstant.U("M"), 1, false, M.Values1D);
+            sphere.drawWire();
+
+            //planeta
+            M = mat4.RotateY(time) * mat4.Translate(1.5f, 0, 0) * mat4.Scale(0.2f, 0.2f, 0.2f) * mat4.RotateY(time);
+            GL.UniformMatrix4(DemoShaders.spConstant.U("M"), 1, false, M.Values1D);
+            sphere.drawWire();
+
+            //księżyc
+            M *= mat4.RotateY(time) * mat4.Translate(1.5f, 0, 0) * mat4.Scale(0.1f, 0.1f, 0.1f);
+            GL.UniformMatrix4(DemoShaders.spConstant.U("M"), 1, false, M.Values1D);
+            sphere.drawWire();
 
             Glfw.SwapBuffers(window);
         }

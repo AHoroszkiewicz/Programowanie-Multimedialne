@@ -54,13 +54,23 @@ namespace PMLabs
             GL.UniformMatrix4(DemoShaders.spConstant.U("M"), 1, false, M.Values1D);
             sphere.drawWire();
 
-            //planeta
+            //planeta1
             M = mat4.RotateY(time) * mat4.Translate(1.5f, 0, 0) * mat4.Scale(0.2f, 0.2f, 0.2f) * mat4.RotateY(time);
             GL.UniformMatrix4(DemoShaders.spConstant.U("M"), 1, false, M.Values1D);
             sphere.drawWire();
 
-            //księżyc
+            //księżyc1
             M *= mat4.RotateY(time) * mat4.Translate(1.5f, 0, 0) * mat4.Scale(0.1f, 0.1f, 0.1f);
+            GL.UniformMatrix4(DemoShaders.spConstant.U("M"), 1, false, M.Values1D);
+            sphere.drawWire();
+
+            //planeta2
+            M = mat4.RotateZ(time) * mat4.Translate(2f, 0, 0) * mat4.Scale(0.25f, 0.25f, 0.25f) * mat4.RotateY(time);
+            GL.UniformMatrix4(DemoShaders.spConstant.U("M"), 1, false, M.Values1D);
+            sphere.drawWire();
+
+            //księżyc2
+            M *= mat4.RotateX(time) * mat4.Translate(2.3f, 0, 0) * mat4.Scale(0.07f, 0.07f, 0.07f);
             GL.UniformMatrix4(DemoShaders.spConstant.U("M"), 1, false, M.Values1D);
             sphere.drawWire();
 

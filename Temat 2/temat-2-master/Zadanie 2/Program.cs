@@ -76,11 +76,11 @@ namespace PMLabs
             mat4 M = mat4.Rotate(angle_y, new vec3(0, 1, 0)) * mat4.Rotate(angle_x, new vec3(1, 0, 0));
             GL.UniformMatrix4(DemoShaders.spConstant.U("M"), 1, false, M.Values1D);
 
-            float red = (MathF.Sin((float)Glfw.Time) + 1) / 2;
-            float green = (MathF.Sin((float)Glfw.Time) + 1) / 2;
-            float blue = (MathF.Sin((float)Glfw.Time) + MathF.Cos((float)Glfw.Time)) / 2;
+            float red = (glm.Sin(time) + 1) / 2;
+            float green = (MathF.Cos(time) + 1) / 2;
+            float blue = (MathF.Sin(time) + MathF.Cos(time)) / 2;
             GL.Uniform4(DemoShaders.spConstant.U("color"), red, green, blue, 1f);
-            torus.drawWire();
+            torus.drawSolid();
 
             Glfw.SwapBuffers(window);
         }
@@ -102,6 +102,7 @@ namespace PMLabs
             InitOpenGLProgram(window);
             Glfw.Time = 0;
 
+            float time = 0;
             float angle_x = 0;
             float angle_y = 0;
 
@@ -109,8 +110,9 @@ namespace PMLabs
             {
                 angle_x += speed_x * (float)Glfw.Time; //Aktualizuj kat obrotu wokół osi X zgodnie z prędkością obrotu
                 angle_y += speed_y * (float)Glfw.Time; //Aktualizuj kat obrotu wokół osi Y zgodnie z prędkością obrotu
+                time += (float)Glfw.Time;
                 Glfw.Time = 0; //Wyzeruj licznik czasu
-                DrawScene(window, angle_x, angle_y, (float)Glfw.Time);
+                DrawScene(window, angle_x, angle_y, time);
 
                 Glfw.PollEvents();
             }

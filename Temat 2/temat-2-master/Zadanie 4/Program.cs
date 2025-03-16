@@ -54,6 +54,7 @@ namespace PMLabs
         {
             GL.ClearColor(0, 0, 0, 1);
             DemoShaders.InitShaders("Shaders/");
+            GL.Enable(EnableCap.DepthTest);
             Glfw.SetKeyCallback(window, kc); //Zarejestruj metodę obsługi klawiatury
         }
 
@@ -62,21 +63,25 @@ namespace PMLabs
 
         }
 
-        public static void DrawScene(Window window, float angle_x, float angle_y)
+        public static void DrawScene(Window window, float angle_x, float angle_y, float time)
         {
             GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
 
             mat4 P = mat4.Perspective(glm.Radians(50.0f), 1, 1, 50);
             mat4 V = mat4.LookAt(new vec3(0, 0, -5), new vec3(0, 0, 0), new vec3(0, 1, 0));
 
-            DemoShaders.spConstant.Use();
-            GL.UniformMatrix4(DemoShaders.spConstant.U("P"), 1, false, P.Values1D);
-            GL.UniformMatrix4(DemoShaders.spConstant.U("V"), 1, false, V.Values1D);
+            DemoShaders.spLambert.Use();
+            GL.UniformMatrix4(DemoShaders.spLambert.U("P"), 1, false, P.Values1D);
+            GL.UniformMatrix4(DemoShaders.spLambert.U("V"), 1, false, V.Values1D);
 
             mat4 M = mat4.Rotate(angle_y, new vec3(0, 1, 0)) * mat4.Rotate(angle_x, new vec3(1, 0, 0));
-            GL.UniformMatrix4(DemoShaders.spConstant.U("M"), 1, false, M.Values1D);
+            GL.UniformMatrix4(DemoShaders.spLambert.U("M"), 1, false, M.Values1D);
 
-            torus.drawWire();
+            float red = (glm.Sin(time) + 1) / 2;
+            float green = (MathF.Cos(time) + 1) / 2;
+            float blue = (MathF.Sin(time) + MathF.Cos(time)) / 2;
+            GL.Uniform4(DemoShaders.spLambert.U("color"), red, green, blue, 1f);
+            torus.drawSolid();
 
             Glfw.SwapBuffers(window);
         }
@@ -97,7 +102,8 @@ namespace PMLabs
 
             InitOpenGLProgram(window);
             Glfw.Time = 0;
-            
+
+            float time = 0;
             float angle_x = 0;
             float angle_y = 0;
 
@@ -105,8 +111,9 @@ namespace PMLabs
             {
                 angle_x += speed_x * (float)Glfw.Time; //Aktualizuj kat obrotu wokół osi X zgodnie z prędkością obrotu
                 angle_y += speed_y * (float)Glfw.Time; //Aktualizuj kat obrotu wokół osi Y zgodnie z prędkością obrotu
+                time += (float)Glfw.Time;
                 Glfw.Time = 0; //Wyzeruj licznik czasu
-                DrawScene(window, angle_x, angle_y);
+                DrawScene(window, angle_x, angle_y, time);
 
                 Glfw.PollEvents();
             }

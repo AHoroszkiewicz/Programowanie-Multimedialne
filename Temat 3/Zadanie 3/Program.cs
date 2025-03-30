@@ -7,6 +7,7 @@ using OpenTK.Graphics.OpenGL4;
 using System.Drawing;
 
 using Shaders;
+using Models;
 
 namespace PMLabs
 {
@@ -52,6 +53,7 @@ namespace PMLabs
         {
             GL.ClearColor(0, 0, 0, 1);
             shader = new ShaderProgram("v_shader.glsl", "f_shader.glsl");
+            GL.Enable(EnableCap.DepthTest);
             Glfw.SetKeyCallback(window, kc);
         }
 
@@ -74,7 +76,13 @@ namespace PMLabs
             mat4 M = mat4.Rotate(angle_y, new vec3(0, 1, 0)) * mat4.Rotate(angle_x, new vec3(1, 0, 0));
             GL.UniformMatrix4(shader.U("M"), 1, false, M.Values1D);
 
-
+            GL.EnableVertexAttribArray(shader.A("vertex"));
+            GL.EnableVertexAttribArray(shader.A("color"));
+            GL.VertexAttribPointer(shader.A("vertex"), 4, VertexAttribPointerType.Float, false, 0, MyCube.vertices);
+            GL.VertexAttribPointer(shader.A("color"), 4, VertexAttribPointerType.Float, false, 0, MyCube.colors);
+            GL.DrawArrays(PrimitiveType.Triangles, 0, MyCube.vertexCount);
+            GL.DisableVertexAttribArray(shader.A("vertex"));
+            GL.DisableVertexAttribArray(shader.A("color"));
 
             Glfw.SwapBuffers(window);
         }

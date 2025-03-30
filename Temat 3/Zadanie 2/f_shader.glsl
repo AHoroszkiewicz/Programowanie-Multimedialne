@@ -1,8 +1,8 @@
 #version 330
 
-
-out vec4 pixelColor; //Zmienna wyjsciowa fragment shadera. Zapisuje sie do niej ostateczny (prawie) kolor piksela
+in vec4 vertex_color; //Zmienna wejsciowa fragment shadera. Przechowuje kolor wierzcholka
+out vec4 fragColor; //Zmienna wyjsciowa fragment shadera. Przechowuje kolor fragmentu
 
 void main(void) {
-	pixelColor=vec4(1,1,1,1);
+	fragColor = vertex_color;
 }

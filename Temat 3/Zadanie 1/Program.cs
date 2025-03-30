@@ -74,7 +74,10 @@ namespace PMLabs
             mat4 M = mat4.Rotate(angle_y, new vec3(0, 1, 0)) * mat4.Rotate(angle_x, new vec3(1, 0, 0));
             GL.UniformMatrix4(shader.U("M"), 1, false, M.Values1D);
 
-            
+            GL.EnableVertexAttribArray(shader.A("vertex"));
+            GL.VertexAttribPointer(shader.A("vertex"), 4, VertexAttribPointerType.Float, false, 0, MyCube.vertices);
+            GL.DrawArrays(PrimitiveType.Triangles, 0, MyCube.vertexCount);
+            GL.DisableVertexAttribArray(shader.A("vertex"));
 
             Glfw.SwapBuffers(window);
         }

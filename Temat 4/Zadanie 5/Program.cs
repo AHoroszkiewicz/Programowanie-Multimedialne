@@ -22,7 +22,6 @@ namespace PMLabs
 
     class Program
     {
-
         static ShaderProgram shader;
         static float speed_y;
         static float speed_x;
@@ -51,6 +50,9 @@ namespace PMLabs
         {
             GL.ClearColor(0, 0, 0, 1);
             shader = new ShaderProgram("v_shader.glsl", "f_shader.glsl");
+            int texID = ReadTexture(@"E:\Studia\Programowanie Multimedialne\Temat 4\metal.png", TextureUnit.Texture0);
+            GL.Uniform1(shader.U("tex"), 0); // Ustawiamy sampler `tex` na jednostkę teksturującą 0
+
             Glfw.SetKeyCallback(window, kc);
             GL.Enable(EnableCap.DepthTest);
 
@@ -101,6 +103,19 @@ namespace PMLabs
 
             mat4 M = mat4.Rotate(angle_y, new vec3(0, 1, 0)) * mat4.Rotate(angle_x, new vec3(1, 0, 0));
             GL.UniformMatrix4(shader.U("M"), 1, false, M.Values1D);
+
+            GL.Uniform4(shader.U("lightPos"), 0.0f, 0.0f, -6.0f, 1.0f);
+
+            GL.EnableVertexAttribArray(shader.A("vertex"));
+            GL.EnableVertexAttribArray(shader.A("normal"));
+            GL.EnableVertexAttribArray(shader.A("texcoord"));
+            GL.VertexAttribPointer(shader.A("vertex"), 4, VertexAttribPointerType.Float, false, 0, MyTeapot.vertices);
+            GL.VertexAttribPointer(shader.A("normal"), 4, VertexAttribPointerType.Float, false, 0, MyTeapot.vertexNormals);
+            GL.VertexAttribPointer(shader.A("texcoord"), 2, VertexAttribPointerType.Float, false, 0, MyTeapot.texCoords);
+            GL.DrawArrays(PrimitiveType.Triangles, 0, MyTeapot.vertexCount);
+            GL.DisableVertexAttribArray(shader.A("vertex"));
+            GL.DisableVertexAttribArray(shader.A("normal"));
+            GL.DisableVertexAttribArray(shader.A("texcoord"));
 
             Glfw.SwapBuffers(window);
         }
